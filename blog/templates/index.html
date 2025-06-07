@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}首页{% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center; margin: 2rem 0; color: #2c3e50;">最新文章</h1>
+  {% for post in posts %}
+    <div class="post-card">
+      <h2>{{ post.title }}</h2>
+      <small>
+        <i class="fas fa-user"></i> {{ post.author.username }} 
+        | <i class="fas fa-calendar"></i> {{ post.date_posted.strftime('%Y-%m-%d') }}
+        | 点赞数: {{ post.likes|length }}  <!-- 关键修正 -->
+      </small>
+      <p style="margin-top: 1rem; color: #555;">{{ post.content }}</p>
+      
+      <!-- 点赞按钮 -->
+      <form method="POST" action="{{ url_for('like_post', post_id=post.id) }}">
+        <button type="submit" class="btn-like">
+          {{ '❤️ 取消点赞' if current_user in post.likes|map(attribute='user') else '❤️ 点赞' }}
+        </button>
+      </form>
+
+      <!-- 编辑按钮（仅作者可见） -->
+      {% if current_user == post.author %}
+        <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn-edit">✏️ 编辑</a>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="post-card">
+      <p style="text-align: center; color: #7f8c8d;">暂无文章，快去发布第一篇吧！</p>
+    </div>
+  {% endfor %}
+{% endblock %}

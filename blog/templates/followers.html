@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}{{ user.username }}的粉丝列表{% endblock %}
+
+{% block content %}
+  <h1>{{ user.username }} 的粉丝</h1>
+  {% if user.followers %}
+    {% for follower in user.followers %}
+      <div class="user-card">
+        <a href="{{ url_for('user_profile', username=follower.username) }}">
+          <i class="fas fa-user-circle"></i>
+          {{ follower.username }}
+        </a>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="post-card">
+      <p style="text-align: center; color: #7f8c8d;">暂无粉丝。</p>
+    </div>
+  {% endif %}
+{% endblock %}

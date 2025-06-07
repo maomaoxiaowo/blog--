@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}{{ user.username }}的关注列表{% endblock %}
+
+{% block content %}
+  <h1>{{ user.username }} 关注的人</h1>
+  {% if user.followed %}
+    {% for followed_user in user.followed %}
+      <div class="user-card">
+        <a href="{{ url_for('user_profile', username=followed_user.username) }}">
+          <i class="fas fa-user-circle"></i>
+          {{ followed_user.username }}
+        </a>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="post-card">
+      <p style="text-align: center; color: #7f8c8d;">暂无关注用户。</p>
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,6 @@
+<!-- templates/post_detail.html -->
+{% if current_user.is_authenticated and current_user == post.author %}
+  <div class="edit-actions">
+    <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-primary">编辑文章</a>
+  </div>
+{% endif %}

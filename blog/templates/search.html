@@ -1,0 +1,67 @@
+<!-- templates/search.html -->
+{% extends "base.html" %}
+{% block title %}搜索 "{{ keyword }}"{% endblock %}
+
+{% block content %}
+  <div class="search-tabs">
+    <a href="{{ url_for('search', q=keyword, type='posts') }}" 
+       class="tab {% if result_type == 'posts' %}active{% endif %}">
+       文章 ({{ posts|length }})
+    </a>
+    <a href="{{ url_for('search', q=keyword, type='users') }}" 
+       class="tab {% if result_type == 'users' %}active{% endif %}">
+       用户 ({{ users|length }})
+    </a>
+  </div>
+
+  <h1 style="text-align: center; margin: 1rem 0; color: #2c3e50;">
+    搜索关键词：{{ keyword }}
+  </h1>
+
+  <!-- 文章结果 -->
+  {% if result_type == 'posts' %}
+    {% if posts %}
+      {% for post in posts %}
+        <div class="post-card">
+          <h2>{{ post.title }}</h2>
+          <small>
+            <i class="fas fa-user"></i> {{ post.author.username }} 
+            | <i class="fas fa-calendar"></i> {{ post.date_posted.strftime('%Y-%m-%d') }}
+          </small>
+          <p style="margin-top: 1rem; color: #555;">{{ post.content }}</p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="post-card">
+        <p style="text-align: center; color: #7f8c8d;">未找到相关文章。</p>
+      </div>
+    {% endif %}
+  {% endif %}
+
+  <!-- 用户结果 -->
+<!-- templates/search.html -->
+<!-- 用户结果部分 -->
+{% if result_type == 'users' %}
+  {% if users %}
+    {% for user in users %}
+      <!-- templates/search.html -->
+    <!-- 用户卡片部分 -->
+    <div class="user-card">
+        <div class="user-info">
+          <i class="fas fa-user-circle"></i>
+          <div>
+            <h3>{{ user.username }}</h3>
+            <small>{{ user.email | mask_email }}</small>
+        </div>
+        </div>
+        <!-- 修正链接：使用 url_for 并传递 username 参数 -->
+        <a href="{{ url_for('user_profile', username=user.username) }}" class="btn-profile">查看主页</a>
+    </div>
+        {% endfor %}
+    {% else %}
+        <div class="post-card">
+        <p style="text-align: center; color: #7f8c8d;">未找到相关用户。</p>
+    </div>
+  {% endif %}
+{% endif %}
+{% endblock %}
